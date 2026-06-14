@@ -1,0 +1,29 @@
+Any code authored solely by me (plu5) is placed in the public domain,
+or CC0 in countries where that is not possible.
+https://creativecommons.org/publicdomain/zero/1.0
+
+===============
+Included files:
+===============
+
+Files: .gitattributes
+       COPYING
+       README.md
+       crypt
+       hi.txt
+Licence: Public domain or CC0 1.0 Universal Public Domain Dedication
+Comments: Files where all contributors gave their explicit agreement
+          to place their contributions in the public domain,
+          or under a permissive CC0 licence where that is not possible.
+Contributors:
+1. plu5 <plu5@users.noreply.github.com>
+
+======================
+External dependencies:
+======================
+
+OpenSSL
+Licence: Apache 2.0
+
+Git
+Licence: GNU GPLv2

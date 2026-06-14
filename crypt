@@ -1,0 +1,54 @@
+#!/usr/bin/env sh
+# crypt - encrypt/decrypt stdin with openssl cms aes256-gcm
+# 2026-06-14 12:54
+#
+# Dependencies:
+# - openssl
+#
+# Usage:
+# First create a key and certificate with:
+#     openssl req -x509 -newkey rsa:2048 -keyout key.pem -out req.pem -nodes
+# (the -nodes option makes it so the key will not be encrypted,
+#  otherwise it will prompt you for a password to encrypt it with, and
+#  you will have to provide this password when decrypting)
+#
+# Then you can encrypt with:
+#     echo "encrypt this" | crypt encrypt
+# or:
+#     cat filetoencrypt | crypt encrypt
+# And decrypt with:
+#     cat encryptedfile | crypt decrypt
+#
+# To use as a git smudge/clean filter:
+#     git config --global filter.crypt.clean 'crypt encrypt'
+#     git config --global filter.crypt.smudge 'crypt decrypt'
+# and create a .gitattributes with:
+#     *.txt filter=crypt
+# or a different pattern instead of the `*.txt` to match the files you
+# want to affect.
+#
+# Keep key.pem or its contents safe! Without it, you will not be able
+# to decrypt. The certificate is not as important, it's possible to
+# decrypt without it; the ciphertext is a CMS structure that contains
+# encryptedKey, encryptedContent, the IV, and the MAC. You can decrypt
+# encryptedKey with your RSA key in key.pem (with RSA-OAEP SHA256),
+# and decrypt encryptedContent+MAC with it and the IV (with AES-GCM).
+
+USAGE="Usage: crypt (encrypt|decrypt)"
+
+[ -z "$1" ] && echo "$USAGE" && exit 1
+
+case "$1" in
+    encrypt)
+        cat |
+            openssl cms -encrypt -aes-256-gcm -recip req.pem \
+                    -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
+        ;;
+    decrypt)
+        cat |
+            openssl cms -decrypt -recip req.pem -inkey key.pem
+        ;;
+    *)
+        echo "$USAGE" && exit 1
+        ;;
+esac
