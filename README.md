@@ -20,6 +20,7 @@ jose jwk gen -i '{"alg": "A256GCM"}' -o oct.jwk
 git config --global filter.crypt.clean 'jose jwe enc -I- -k oct.jwk --compact'
 git config --global filter.crypt.smudge 'jose jwe dec -i- -k oct.jwk'
 git config --global filter.crypt.required true
+# ^ makes it not stage the file if the filter errors
 ```
 Or without `--global` to only apply to current repository.
 
