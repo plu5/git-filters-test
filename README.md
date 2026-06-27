@@ -9,12 +9,10 @@ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out req.pem -nodes
 otherwise it will prompt you for a password to encrypt it with, and
 you will have to provide this password when decrypting)
 
-Included is a POSIX shell script called `crypt` to encrypt/decrypt with OpenSSL CMS AES-GCM. The certificate and key are hardcoded respectively as `req.pem` and `key.pem`.
-
 To use as a git smudge/clean filter:
 ```sh
-git config --global filter.crypt.clean 'crypt encrypt'
-git config --global filter.crypt.smudge 'crypt decrypt'
+git config --global filter.crypt.clean 'openssl cms -encrypt -aes-256-gcm -recip req.pem -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256'
+git config --global filter.crypt.smudge 'openssl cms -decrypt -recip req.pem -inkey key.pem'
 git config --global filter.crypt.required true
 # ^ makes it not stage the file if the filter errors
 ```
