@@ -21,8 +21,11 @@ Contributors:
 External dependencies:
 ======================
 
+Git
+Licence: GNU GPLv2
+
 OpenSSL
 Licence: Apache 2.0
 
-Git
-Licence: GNU GPLv2
+latchset/jose
+Licence: Apache 2.0
