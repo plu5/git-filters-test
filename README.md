@@ -1,5 +1,11 @@
 Test repository for encryption/decryption with git clean/smudge filters using JWE or OpenSSL CMS.
 
+## Contents
+
+1. [Set up: JWE](#set-up-jwe)
+1. [Set up: OpenSSL CMS](#set-up-openssl-cms)
+1. [A note on cloning with the crypt filter active](#a-note-on-cloning-with-the-crypt-filter-active)
+
 ## Set up: JWE
 Using [latchset/jose](https://github.com/latchset/jose), which is available in Arch Linux on extra/jwe.
 There exist other JOSE/JWI CLI (as well as libraries for all popular programming languages) which you could use instead, and adapt the commands below according to their interface.
