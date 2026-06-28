@@ -9,6 +9,7 @@ Included files:
 Files: .gitattributes
        COPYING
        README.md
+       ha.txt
        hi.txt
 Licence: Public domain or CC0 1.0 Universal Public Domain Dedication
 Comments: Files where all contributors gave their explicit agreement
