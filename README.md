@@ -35,6 +35,12 @@ Encrypted file format ([JWE Compact Serialisation](https://datatracker.ietf.org/
 ```text
 eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..RWwAina2Y6pFiKp3.Jj4j.QitJY2B1RBZ-8S0Dm_2yUA
 ```
+`protectedHeader.encryptedKey.iv.encryptedContent.mac`. The first field, `eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0`, is the protectedHeader `{alg: "dir", enc: "A256GCM"}`, and will always be this same value for all things encrypted with these settings. `alg` is the key encryption algorithm (key wrap). `dir` means no key wrap; directly encrypt the content. The `..` in the resulting structure is because the encryptedKey field is empty.
+
+> [!NOTE]
+> Key wrapping is useful for (1) multiple recipients, (2) not having to update encryptedContent to rotate the KEK (key encryption key), (3) JWE will encrypt each file with a different CEK (content encryption key), so if it leaks only one file is compromised (though in practice you can only decrypt the CEK if you have the KEK. In theory the CEK without the KEK could leak in logs or memory dumps).
+>
+> I think there's not much benefit wrapping the key in this use case (even if you have multiple developers, the encryptedKey field on each file will be the same for everyone, so everyone needs the same key in practice to be able to decrypt it), and "dir" is simpler and faster, so that's what I opt for.
 
 Keep oct.jwk safe, or at least save the value in its k field. Without it, you will not be able
 to decrypt.
