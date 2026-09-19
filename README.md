@@ -1,5 +1,14 @@
 Test repository for encryption/decryption with git clean/smudge filters using JWE or OpenSSL CMS.
 
+> [!CAUTION]
+> There are issues with this approach. The filter isn't stable. Running clean twice on the same plaintext results in a different ciphertext. Git compares the content post-clean. Normally git doesn't compare the contents of the files if the metadata hasn't changed, so on the same local repository you would not at first notice a problem, but if there is some tool that changes metadata on files en masse, they will all be marked as changed despite not having changed. Merge will be broken too. Clone/checkout likewise resulting in unclean working directory without any real change; it can be made to work, but only by forcing git to accept the files as unmodified with `git -c filter.crypt.clean="git show HEAD:%f" update-index --really-refresh`.
+>
+> A bad situation would be something changing the metadata on files en masse provoking this problem without the user knowing which files really changed.
+>
+> It's also not idempotent; clean(clean(x)) ≠ clean(x), but I don't understand git well enough yet to understand where this would cause problems (merging?). It's not impossible to make the filter idempotent by just not encrypting again if it sees it's already in JWE/CMS format.
+>
+> [Discussion](https://github.com/plu5/plu5.github.io/blob/master/_devlog/17-git-clean-smudge.md#filter-stability)
+
 ## Contents
 
 1. [Set up: JWE](#set-up-jwe)
